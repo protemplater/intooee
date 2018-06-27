@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style type="less/intooee" data-name="Users.list" data-ext="ListSelect">
+        #listWrap [data-key="{{key}}"] {
+            background: lawngreen;
+        }
+    </style>
+    <style type="less/intooee" data-name="Users.list" data-ext="ListPager">
+        #listPager [data-key="{{key}}"] {
+            background: red;
+        }
+    </style>
+
+    <script src="/node_modules/systemjs/dist/system.src.js"></script>
+    <script>
+        System.config({
+            baseURL: './',
+            map: {
+                'plugin-babel': '../node_modules/systemjs-plugin-babel/plugin-babel.js',
+                'systemjs-babel-build': '../node_modules/systemjs-plugin-babel/systemjs-babel-browser.js'
+            },
+            transpiler: 'plugin-babel'
+        });
+
+        System.import('bootstrap.js');
+    </script>
+</head>
+<body>
+<h1>Sample page</h1>
+<div class="mod-list-wrap">
+    <div class="mod-form">
+        <input type="text" id="firstName" data-input="Users.firstName" />
+        <input type="text" id="lastName" data-input="Users.firstName" />
+        <button id="textClick" data-click>Create item</button>
+    </div>
+    <div class="mod-list">
+        <div id="listPager" data-list="Users.list.pagerItems">
+            <span data-click="Users.selectPage">{{$index}}</span>
+        </div>
+        <table>
+            <tbody id="listWrap" data-list="Users.list">
+                <tr data-click="Users.selectUser">
+                    <td>{{firstName}}, {{lastName}}</td>
+                    <td>
+                        <ul data-list="list">
+                            <li>{{$index}} dsd{{$item}}</li>
+                        </ul>
+                    </td>
+                    <td><button class="delete" data-click="Users.deleteUser">x</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="hi"></div>
+</body>
+</html>

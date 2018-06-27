@@ -1,0 +1,17 @@
+{
+  "name": "intooee",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./.bin/server"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "mime-types": "^2.1.18"
+  },
+  "dependencies": {
+    "systemjs": "^0.21.3",
+    "systemjs-plugin-babel": "0.0.25"
+  },
+  "babel": {}
+}
