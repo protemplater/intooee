@@ -34,12 +34,14 @@ export default class List {
         this.__.rawItems = defaultArray;
         // emit('list', 'init', {list: this});
     }
-    applyExtenders(){
+
+    applyExtenders() {
         if (this.__.ext) {
             this.__.ext.forEach(fn => fn(this));
         }
 
     }
+
     verifyUID(arr, id) {
         const proper = arr.map((it, ind) => ({[id]: id in it ? it[id] : ind + this.__.autocount, ...it}));
         this.__.autocount += arr.length;
@@ -64,6 +66,10 @@ export default class List {
         this.__.totalCount += data.length;
         this.__.modifiers.exec();
         emit('list', 'add', {ref: this, list: this, data: uidReady, items: this.__.items});
+    }
+
+    emit(type, data) {
+        emit('list', type, {list: this, ...data});
     }
 
     emitUpdate() {

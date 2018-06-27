@@ -1,5 +1,3 @@
-import {emit} from '../Common.js';
-
 export default function ListPager(params) {
     class Pager {
         constructor(list, {limit = 3, offset = 0} = {}) {
@@ -11,9 +9,11 @@ export default function ListPager(params) {
         }
 
         render() {
-            emit('list', 'pagerUpdate', {list: this.__.list, params: {
-                key: this.__.offset / this.__.limit,
-            }});
+            this.__.list.emit('pagerUpdate', {
+                params: {
+                    key: this.__.offset / this.__.limit,
+                }
+            });
         }
 
         get limit() {
@@ -26,7 +26,7 @@ export default function ListPager(params) {
 
         set offset(val) {
             if (val < 0) {
-                this.__.offset = (Math.ceil(this.__.list.__.totalCount / this.__.limit)-1)*this.__.limit;
+                this.__.offset = (Math.ceil(this.__.list.__.totalCount / this.__.limit) - 1) * this.__.limit;
             } else {
                 this.__.offset = val;
             }
