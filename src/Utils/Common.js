@@ -1,4 +1,4 @@
-import {setStyleData} from './UI/UI.js';
+// import {setStyleData} from './UI/UI.js';
 
 export function dispatch(type, data, origEvent) {
     const event = new CustomEvent(type, {
@@ -123,4 +123,38 @@ export class Renderer {
             background: red;
         }`, params);
     }
+}
+export function parentUntil(node, parentNode) {
+    let resultNode = node;
+    while (resultNode !== document && !parentNode.isSameNode(resultNode.parentNode)) {
+        resultNode = resultNode.parentNode;
+    }
+    return resultNode;
+}
+
+export function geNodeIndexAmongSiblings(node) {
+    return Array.prototype.indexOf.call(node.parentNode.children, node);
+}
+
+function closestAll(node, sel) {
+    // get all parent DOM ancestors for selector
+    let currentNode = node;
+    let parentNodes = [];
+    while (currentNode) {
+        currentNode = currentNode.closest(sel) && currentNode.closest(sel).isSameNode(currentNode) ? currentNode.parentNode.closest(sel) : currentNode.closest(sel); // prevent recursion
+        if (currentNode) {
+            parentNodes.push(currentNode);
+        }
+    }
+    return parentNodes;
+}
+
+function getPrototypeChainOf(object) {
+    let proto = object.constructor.prototype;
+    let result = [];
+    while (proto) {
+        result.push(proto.constructor.name);
+        proto = Object.getPrototypeOf(proto)
+    }
+    return result;
 }

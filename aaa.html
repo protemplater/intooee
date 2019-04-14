@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    const generic = {
+        insertAdjacentHTML: Element.prototype.insertAdjacentHTML,
+        appendChild: Element.prototype.appendChild,
+        innerHTML: Element.prototype.insertAdjacentHTML,
+    };
+
+    const GenericElement = Object.assign({}, Element);
+    const oldinsertAdjacentHTML = Element.prototype.insertAdjacentHTML;
+    Element.prototype.insertAdjacentHTML = function (a, b) {
+        console.warn('insert');
+        generic.insertAdjacentHTML.call(this, a, b);
+    };
+
+    function overrideSetterMethod(object, property, params) {
+        var fn = params.onSet;
+        var ownObjectProto = object;
+        // exit if bad property
+//        if (!object[property]) {
+//            console.error(property + " is not a property of " + object.toString());
+//            return;
+//        }
+
+
+        while (!Object.getOwnPropertyDescriptor(ownObjectProto, property)) {
+            ownObjectProto = Object.getPrototypeOf(ownObjectProto);
+        }
+
+        var ownProperty = Object.getOwnPropertyDescriptor(ownObjectProto, property);
+        Object.defineProperty(object, property, {
+            // Create a new getter for the property
+            get: function () {
+                console.log('access gettter');
+                return ownProperty.get.call(this);
+            },
+            // Create a new setter for the property
+            set: function (val) {
+                fn && fn(val);
+                return ownProperty.set.call(this, val);
+            }
+        })
+    };
+    overrideSetterMethod(Element.prototype, 'innerHTML', {
+        onSet: function () {
+            console.warn('innerhtml set', this.constructor.name);
+        }
+    });
+    document.body.insertAdjacentHTML('beforeEnd', '<div id="qwe">sdasdasd</div>');
+    window.qwe.innerHTML = '<div id="qwe">1111sdasdasd</div>';
+</script>
+
+</body>
+</html>

@@ -1,6 +1,13 @@
-import {App} from "../src/intooee.js";
-import {Users} from "./User.js";
+import {App} from 'src/App';
+import {LayoutMain} from './LayoutMain.js';
+import {LayoutList} from './LayoutList.js';
 
-new App({
-    components:[Users]
+const app = new App();
+app.loadRouteMap({
+    '/': LayoutMain,
+    '/list': LayoutList,
+    '/recipes': {
+        layout: LayoutList,
+        '/:id': LayoutList
+    }
 });

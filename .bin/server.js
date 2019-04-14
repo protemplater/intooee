@@ -9,9 +9,12 @@ var port = 9009;
 
 http.createServer(function (request, response) {
     try {
-        const requestUrl = url.parse(request.url === '/' ? '/sample/index.html' : (request.url.indexOf('/src/') === -1 && request.url.indexOf('node_modules') === -1 ? '/sample/' + request.url: request.url));
+        const requestUrl = url.parse(
+            request.url === '/' || (request.url.indexOf('.js') === -1 && request.url.indexOf('.css') === -1) ?
+                '/sample/index.html' :
+                (request.url.indexOf('/src/') === -1 && request.url.indexOf('node_modules') === -1 ?
+                    '/sample/' + request.url : request.url));
 
-        console.log(request.url);
         // need to use path.normalize so people can't access directories underneath baseDirectory
         const fsPath = baseDirectory+path.normalize(requestUrl.pathname);
 
@@ -28,6 +31,9 @@ http.createServer(function (request, response) {
         response.end()     // end the response so browsers don't hang
         console.log(e.stack)
     }
-}).listen(port)
+}).listen(port);
 
+var urlToOpen = 'http://localhost:'+port;
+var start = (process.platform == 'darwin'? 'open': process.platform == 'win32'? 'start': 'xdg-open');
+require('child_process').exec(start + ' ' + urlToOpen);
 console.log("listening on port "+port)
